@@ -1,9 +1,17 @@
 import json
 import mysql.connector
+import sys
 
 def process_and_store_data(filename):
-    with open(filename, 'r') as file:
-        data = json.load(file)
+    try:
+        with open(filename, 'r') as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        print(f"Error: File '{filename}' not found.")
+        return
+    except json.JSONDecodeError:
+        print(f"Error: Failed to decode JSON from file '{filename}'.")
+        return
 
     products = data['items']
     product_data = [(product['name'], product['base_price'], product['href']) for product in products]
@@ -34,12 +42,12 @@ def process_and_store_data(filename):
     conn.commit()
     conn.close()
 
-    check_urls()
-
 def check_urls():
     import check_urls
     check_urls.verify_urls()
 
 if __name__ == "__main__":
-    import sys
-    process_and_store_data(sys.argv[1])
+    if len(sys.argv) < 2:
+        print("Usage: python process_data.py <filename>")
+    else:
+        process_and_store_data(sys.argv[1])

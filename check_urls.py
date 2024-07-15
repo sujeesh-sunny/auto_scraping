@@ -18,13 +18,13 @@ def verify_urls():
         try:
             response = requests.get(url)
             if response.status_code == 200:
-                active = True
+                is_active = True
             else:
-                active = False
+                is_active = False
         except requests.exceptions.RequestException:
-            active = False
+            is_active = False
 
-        cursor.execute('UPDATE product SET active = %s WHERE id = %s', (active, product_id))
+        cursor.execute('UPDATE product SET active = %s WHERE id = %s', (is_active, product_id))
         conn.commit()
 
     conn.close()

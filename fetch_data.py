@@ -24,12 +24,5 @@ def fetch_data():
     with open(filename, 'w') as file:
         json.dump(data, file)
 
-    process_data(filename)
-
-
-def process_data(filename):
-    import process_data
-    process_data.process_and_store_data(filename)
-
 if __name__ == "__main__":
     fetch_data()
